@@ -48,6 +48,7 @@ data class BikeViewItem(
     val id: String,
     val name: String,
     val stationId: String?,
+    val batteryPercent: Int,
 )
 // endregion
 
@@ -82,6 +83,7 @@ internal fun BikeResponse.toViewItem() = BikeViewItem(
     id = id,
     name = name,
     stationId = stationId,
+    batteryPercent = batteryPercent,
 )
 
 internal fun BikesResponse.toViewItem() = BikesViewItem(

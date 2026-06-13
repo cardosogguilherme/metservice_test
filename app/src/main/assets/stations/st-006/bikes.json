@@ -1,10 +1,10 @@
 {
   "bikes": [
-    { "id": "bk-601", "name": "CityBike 601", "stationId": "st-006" },
-    { "id": "bk-602", "name": "CityBike 602", "stationId": "st-006" },
-    { "id": "bk-603", "name": "CityBike 603", "stationId": "st-006" },
-    { "id": "bk-604", "name": "CityBike 604", "stationId": "st-006" },
-    { "id": "bk-605", "name": "CityBike 605", "stationId": "st-006" },
-    { "id": "bk-606", "name": "CityBike 606", "stationId": "st-006" }
+    { "id": "bk-601", "name": "CityBike 601", "stationId": "st-006", "batteryPercent": 80 },
+    { "id": "bk-602", "name": "CityBike 602", "stationId": "st-006", "batteryPercent": 72 },
+    { "id": "bk-603", "name": "CityBike 603", "stationId": "st-006", "batteryPercent": 64 },
+    { "id": "bk-604", "name": "CityBike 604", "stationId": "st-006", "batteryPercent": 55 },
+    { "id": "bk-605", "name": "CityBike 605", "stationId": "st-006", "batteryPercent": 48 },
+    { "id": "bk-606", "name": "CityBike 606", "stationId": "st-006", "batteryPercent": 90 }
   ]
 }

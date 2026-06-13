@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.cardosogui.citybikesexplorer.selectBike.SelectBikeRoute
 import com.cardosogui.citybikesexplorer.stationDetail.StationDetailRoute
 import com.cardosogui.citybikesexplorer.stations.StationsScreen
 import com.cardosogui.citybikesexplorer.stations.StationsViewModel
@@ -19,8 +20,10 @@ object Routes {
     const val STATIONS = "stations"
     const val STATION_ID_ARG = "stationId"
     const val STATION_DETAIL = "stationDetail/{$STATION_ID_ARG}"
+    const val SELECT_BIKE = "selectBike/{$STATION_ID_ARG}"
 
     fun stationDetail(stationId: String) = "stationDetail/$stationId"
+    fun selectBike(stationId: String) = "selectBike/$stationId"
 }
 
 @Composable
@@ -51,7 +54,19 @@ fun CityBikesNavHost(
             StationDetailRoute(
                 stationId = stationId,
                 onBackClick = { navController.popBackStack() },
-                onSelectBike = { /* TODO: navigate to bike selection once that screen exists */ },
+                onSelectBike = { navController.navigate(Routes.selectBike(stationId)) },
+            )
+        }
+
+        composable(
+            route = Routes.SELECT_BIKE,
+            arguments = listOf(navArgument(Routes.STATION_ID_ARG) { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val stationId = backStackEntry.arguments?.getString(Routes.STATION_ID_ARG).orEmpty()
+            SelectBikeRoute(
+                stationId = stationId,
+                onBackClick = { navController.popBackStack() },
+                onBikeSelected = { /* TODO: confirm bike reservation */ },
             )
         }
     }

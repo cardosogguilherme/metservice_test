@@ -32,4 +32,5 @@ data class BikeResponse(
     val id: String,
     val name: String,
     val stationId: String?,
+    val batteryPercent: Int,
 )

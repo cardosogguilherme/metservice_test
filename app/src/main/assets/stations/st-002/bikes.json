@@ -1,7 +1,7 @@
 {
   "bikes": [
-    { "id": "bk-201", "name": "CityBike 201", "stationId": "st-002" },
-    { "id": "bk-202", "name": "CityBike 202", "stationId": "st-002" },
-    { "id": "bk-203", "name": "CityBike 203", "stationId": "st-002" }
+    { "id": "bk-201", "name": "CityBike 201", "stationId": "st-002", "batteryPercent": 82 },
+    { "id": "bk-202", "name": "CityBike 202", "stationId": "st-002", "batteryPercent": 76 },
+    { "id": "bk-203", "name": "CityBike 203", "stationId": "st-002", "batteryPercent": 68 }
   ]
 }

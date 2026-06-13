@@ -72,6 +72,7 @@ class StationsViewModel @Inject constructor(
         val id: String,
         val name: String,
         val stationId: String?,
+        val batteryPercent: Int,
     )
 // endregion
 
@@ -98,6 +99,7 @@ class StationsViewModel @Inject constructor(
         id = id,
         name = name,
         stationId = stationId,
+        batteryPercent = batteryPercent,
     )
 
     private fun BikesViewItem.toState() = BikesState(

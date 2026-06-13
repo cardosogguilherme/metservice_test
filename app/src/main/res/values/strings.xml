@@ -15,4 +15,7 @@
     <string name="label_last_updated">Last updated</string>
     <string name="coordinates_format">%.4f, %.4f</string>
     <string name="distance_format">%.2f km · %s</string>
+    <string name="available_bikes">Available Bikes</string>
+    <string name="select">Select</string>
+    <string name="battery_format">%d%%</string>
 </resources>
