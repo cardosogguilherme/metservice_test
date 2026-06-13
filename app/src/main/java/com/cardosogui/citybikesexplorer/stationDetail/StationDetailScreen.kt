@@ -36,9 +36,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -70,10 +67,13 @@ fun StationDetailRoute(
     viewModel: StationDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val isFavorite by viewModel.isFavorite.collectAsStateWithLifecycle()
     LaunchedEffect(stationId) { viewModel.load(stationId) }
     StationDetailScreen(
         modifier = modifier,
         state = state,
+        isFavorite = isFavorite,
+        onToggleFavorite = viewModel::toggleFavorite,
         onBackClick = onBackClick,
         onSelectBike = onSelectBike,
         retry = viewModel::retry,
@@ -85,12 +85,13 @@ fun StationDetailRoute(
 fun StationDetailScreen(
     modifier: Modifier = Modifier,
     state: StationDetailUiState,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
     onBackClick: () -> Unit,
     onSelectBike: () -> Unit,
     retry: () -> Unit
 ) {
     val title = (state as? StationDetailUiState.Success)?.station?.name ?: stringResource(R.string.station_detail)
-    var isFavorite by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -107,7 +108,7 @@ fun StationDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { isFavorite = !isFavorite }) {
+                    IconButton(onClick = onToggleFavorite) {
                         Icon(
                             painter = painterResource(
                                 if (isFavorite) R.drawable.favorite_24dp else R.drawable.favorite_border_24dp
@@ -373,6 +374,8 @@ private fun StationDetailScreenPreview() {
     )
     StationDetailScreen(
         state = StationDetailUiState.Success(station),
+        isFavorite = false,
+        onToggleFavorite = {},
         onBackClick = {},
         onSelectBike = {},
         retry = {},

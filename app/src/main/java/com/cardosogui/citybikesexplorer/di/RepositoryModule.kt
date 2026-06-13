@@ -1,5 +1,7 @@
 package com.cardosogui.citybikesexplorer.di
 
+import com.cardosogui.citybikesexplorer.favorites.FavoritesRepository
+import com.cardosogui.citybikesexplorer.favorites.InMemoryFavoritesRepository
 import com.cardosogui.citybikesexplorer.ride.RideRepository
 import com.cardosogui.citybikesexplorer.ride.RideRepositoryImpl
 import com.cardosogui.citybikesexplorer.stations.StationRepository
@@ -18,4 +20,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindRideRepository(impl: RideRepositoryImpl): RideRepository
+
+    @Binds
+    abstract fun bindFavoritesRepository(impl: InMemoryFavoritesRepository): FavoritesRepository
 }
