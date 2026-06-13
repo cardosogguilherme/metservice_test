@@ -2,6 +2,7 @@ package com.cardosogui.citybikesexplorer.di
 
 import com.cardosogui.citybikesexplorer.data.remote.CityBikesApi
 import com.cardosogui.citybikesexplorer.data.remote.LocalJsonInterceptor
+import com.cardosogui.citybikesexplorer.data.remote.RideApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +53,9 @@ object NetworkModule {
     @Singleton
     fun provideCityBikesApi(retrofit: Retrofit): CityBikesApi =
         retrofit.create(CityBikesApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRideApi(retrofit: Retrofit): RideApi =
+        retrofit.create(RideApi::class.java)
 }

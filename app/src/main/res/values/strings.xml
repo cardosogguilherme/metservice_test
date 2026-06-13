@@ -18,4 +18,29 @@
     <string name="available_bikes">Available Bikes</string>
     <string name="select">Select</string>
     <string name="battery_format">%d%%</string>
+
+    <!-- Ride flow -->
+    <string name="confirm_ride">Confirm Ride</string>
+    <string name="unlock_bike">Unlock Bike</string>
+    <string name="payment_method">Payment method</string>
+    <string name="payment_card">Visa •••• 4242</string>
+    <string name="charge_explanation">You will be charged</string>
+    <string name="charge_detail">NZD $1.00 to unlock, then NZD $0.20 / min</string>
+    <string name="ride_in_progress">Ride in Progress</string>
+    <string name="help">Help</string>
+    <string name="close">Close</string>
+    <string name="label_time">Time</string>
+    <string name="label_calories">Calories</string>
+    <string name="end_ride">End Ride</string>
+    <string name="ride_summary">Ride Summary</string>
+    <string name="great_ride">Great ride!</string>
+    <string name="thank_you_message">Thank you for riding with\nCity Bikes Explorer.</string>
+    <string name="label_total_cost">Total cost</string>
+    <string name="label_station">Station</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="distance_km_format">%.1f km</string>
+    <string name="calories_format">%d kcal</string>
+    <string name="total_cost_format">NZD $%.2f</string>
+    <string name="cost_breakdown_format">NZD $%.2f + NZD $%.2f / min</string>
+    <string name="bikes_docks_format">%1$d bikes • %2$d docks</string>
 </resources>

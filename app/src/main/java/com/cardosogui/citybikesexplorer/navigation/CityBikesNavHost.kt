@@ -11,6 +11,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.cardosogui.citybikesexplorer.confirmRide.ConfirmRideRoute
+import com.cardosogui.citybikesexplorer.rideInProgress.RideInProgressRoute
+import com.cardosogui.citybikesexplorer.rideSummary.RideSummaryRoute
 import com.cardosogui.citybikesexplorer.selectBike.SelectBikeRoute
 import com.cardosogui.citybikesexplorer.stationDetail.StationDetailRoute
 import com.cardosogui.citybikesexplorer.stations.StationsScreen
@@ -19,11 +22,16 @@ import com.cardosogui.citybikesexplorer.stations.StationsViewModel
 object Routes {
     const val STATIONS = "stations"
     const val STATION_ID_ARG = "stationId"
+    const val BIKE_ID_ARG = "bikeId"
     const val STATION_DETAIL = "stationDetail/{$STATION_ID_ARG}"
     const val SELECT_BIKE = "selectBike/{$STATION_ID_ARG}"
+    const val CONFIRM_RIDE = "confirmRide/{$STATION_ID_ARG}/{$BIKE_ID_ARG}"
+    const val RIDE_IN_PROGRESS = "rideInProgress"
+    const val RIDE_SUMMARY = "rideSummary"
 
     fun stationDetail(stationId: String) = "stationDetail/$stationId"
     fun selectBike(stationId: String) = "selectBike/$stationId"
+    fun confirmRide(stationId: String, bikeId: String) = "confirmRide/$stationId/$bikeId"
 }
 
 @Composable
@@ -66,7 +74,43 @@ fun CityBikesNavHost(
             SelectBikeRoute(
                 stationId = stationId,
                 onBackClick = { navController.popBackStack() },
-                onBikeSelected = { /* TODO: confirm bike reservation */ },
+                onBikeSelected = { bikeId ->
+                    navController.navigate(Routes.confirmRide(stationId, bikeId))
+                },
+            )
+        }
+
+        composable(
+            route = Routes.CONFIRM_RIDE,
+            arguments = listOf(
+                navArgument(Routes.STATION_ID_ARG) { type = NavType.StringType },
+                navArgument(Routes.BIKE_ID_ARG) { type = NavType.StringType },
+            ),
+        ) { backStackEntry ->
+            val stationId = backStackEntry.arguments?.getString(Routes.STATION_ID_ARG).orEmpty()
+            val bikeId = backStackEntry.arguments?.getString(Routes.BIKE_ID_ARG).orEmpty()
+            ConfirmRideRoute(
+                stationId = stationId,
+                bikeId = bikeId,
+                onBackClick = { navController.popBackStack() },
+                onUnlocked = { navController.navigate(Routes.RIDE_IN_PROGRESS) },
+            )
+        }
+
+        composable(Routes.RIDE_IN_PROGRESS) {
+            RideInProgressRoute(
+                onRideEnded = {
+                    // Ride finished: drop the ride flow from the back stack, leaving the summary above Stations.
+                    navController.navigate(Routes.RIDE_SUMMARY) {
+                        popUpTo(Routes.STATIONS) { inclusive = false }
+                    }
+                },
+            )
+        }
+
+        composable(Routes.RIDE_SUMMARY) {
+            RideSummaryRoute(
+                onBackToHome = { navController.popBackStack(Routes.STATIONS, inclusive = false) },
             )
         }
     }

@@ -1,5 +1,7 @@
 package com.cardosogui.citybikesexplorer.di
 
+import com.cardosogui.citybikesexplorer.ride.RideRepository
+import com.cardosogui.citybikesexplorer.ride.RideRepositoryImpl
 import com.cardosogui.citybikesexplorer.stations.StationRepository
 import com.cardosogui.citybikesexplorer.stations.StationRepositoryImpl
 import dagger.Binds
@@ -13,4 +15,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindStationRepository(impl: StationRepositoryImpl): StationRepository
+
+    @Binds
+    abstract fun bindRideRepository(impl: RideRepositoryImpl): RideRepository
 }
