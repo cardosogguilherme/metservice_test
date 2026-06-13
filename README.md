@@ -19,24 +19,6 @@ mock JSON (no real backend required).
   tapping one deep-links into its detail.
 - **Profile** – a mock profile with a support link.
 
-## How this project was built
-
-This codebase was developed collaboratively with Claude (Anthropic's Claude Code).
-Claude helped with, in roughly this order:
-
-1. Adding the core stack — **Retrofit, Coroutines, and Hilt** — and an MVVM setup.
-2. A **local-JSON mock API**: an OkHttp interceptor (`LocalJsonInterceptor`) serves
-   files from `assets/` so the app works with no live server. Swapping in a real API
-   later just means removing that interceptor.
-3. An **anti-corruption layering** per feature: `Response` (wire) → `ViewItem`
-   (interactor/domain) → `State` (ViewModel/UI), each with its own mappers.
-4. Building each screen and its **ViewModel + Interactor**, the **Navigation Compose**
-   graph, top app bars, Coil image loading with a preview placeholder, and the
-   simulated ride with an in-memory `RideRepository`.
-5. The "extras": stations **search + filters**, the **Favorites** cache + screen, the
-   **Profile** screen, unifying navigation into a single graph, and **unit tests for
-   every ViewModel**.
-
 ## Tech stack
 
 - Kotlin + Jetpack Compose (Material 3)
@@ -44,8 +26,36 @@ Claude helped with, in roughly this order:
 - Hilt (DI), Retrofit + kotlinx.serialization, OkHttp, Coroutines/Flow
 - Navigation Compose, Coil 3 (images)
 - JUnit + kotlinx-coroutines-test
+- `minSdk` 24, `targetSdk`/`compileSdk` 36.
 
-`minSdk` 24, `targetSdk`/`compileSdk` 36.
+
+## Decisions & trade-offs
+
+- **Anti-corruption layering.** I kept separate wire, domain, and UI models with
+  mappers at each boundary, even though it means more DTOs and mapping code. The
+  payoff is that a change to an API response stays contained at the wire layer
+  instead of rippling through the interactors and UI.
+- **Interactors for business logic.** Business logic lives in feature interactors
+  rather than the ViewModels, which keeps ViewModels thin and focused on UI state.
+- **Single module, for now.** The project is small enough that extra Gradle modules
+  would be overhead without much payoff. As it grows, the ride flow and profile are
+  the natural first candidates to split into their own modules.
+- **Mock data sources.** With no real backend, the app runs against a mix of mock
+  APIs, in-memory stores, and bundled mock JSON.
+- **Test coverage.** Tests currently cover the ViewModels. With more time I'd add
+  snapshot testing (Paparazzi) for the views and an Espresso journey test covering
+  a full ride end to end.
+
+## How this project was built
+
+I used Claude Code as a pair-programming tool throughout, the same way I use
+Copilot day to day. The design calls are mine: the MVVM + interactor split, the
+anti-corruption layering (Response → ViewItem → State) with mappers at each
+boundary, the local-JSON interceptor so the app runs with no backend, and the
+in-memory repositories for favorites and ride state. Claude did a lot of the
+implementation against those decisions — wiring Retrofit/Hilt, fleshing out
+screens and ViewModels, and filling in test coverage — which let me move fast
+while keeping the structure deliberate.
 
 ## Running the app
 
