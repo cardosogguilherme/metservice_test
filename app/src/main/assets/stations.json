@@ -8,7 +8,9 @@
       "latitude": -41.2889,
       "longitude": 174.7772,
       "address": "23 Customhouse Quay, Wellington 6011",
-      "lastUpdated": "2026-06-13T08:45:00Z"
+      "lastUpdated": "2026-06-13T08:45:00Z",
+      "distanceKm": 0.25,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-002",
@@ -18,7 +20,9 @@
       "latitude": -41.2790,
       "longitude": 174.7800,
       "address": "2 Bunny Street, Pipitea, Wellington 6011",
-      "lastUpdated": "2026-06-13T08:42:00Z"
+      "lastUpdated": "2026-06-13T08:42:00Z",
+      "distanceKm": 1.40,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-003",
@@ -28,7 +32,9 @@
       "latitude": -41.2825,
       "longitude": 174.7670,
       "address": "101 Glenmore Street, Kelburn, Wellington 6012",
-      "lastUpdated": "2026-06-13T08:51:00Z"
+      "lastUpdated": "2026-06-13T08:51:00Z",
+      "distanceKm": 0.85,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-004",
@@ -38,7 +44,9 @@
       "latitude": -41.2865,
       "longitude": 174.7787,
       "address": "55 Oriental Parade, Oriental Bay, Wellington 6011",
-      "lastUpdated": "2026-06-13T08:47:00Z"
+      "lastUpdated": "2026-06-13T08:47:00Z",
+      "distanceKm": 2.10,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-005",
@@ -48,7 +56,9 @@
       "latitude": -41.2901,
       "longitude": 174.7681,
       "address": "Kelburn Parade, Kelburn, Wellington 6012",
-      "lastUpdated": "2026-06-13T08:39:00Z"
+      "lastUpdated": "2026-06-13T08:39:00Z",
+      "distanceKm": 0.55,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-006",
@@ -58,7 +68,9 @@
       "latitude": -41.2905,
       "longitude": 174.7820,
       "address": "55 Cable Street, Te Aro, Wellington 6011",
-      "lastUpdated": "2026-06-13T08:50:00Z"
+      "lastUpdated": "2026-06-13T08:50:00Z",
+      "distanceKm": 1.75,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     },
     {
       "id": "st-007",
@@ -68,7 +80,9 @@
       "latitude": -41.2730,
       "longitude": 174.7860,
       "address": "105 Waterloo Quay, Pipitea, Wellington 6011",
-      "lastUpdated": "2026-06-13T08:36:00Z"
+      "lastUpdated": "2026-06-13T08:36:00Z",
+      "distanceKm": 3.30,
+      "imageLink": "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg"
     }
   ]
 }

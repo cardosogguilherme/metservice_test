@@ -18,6 +18,8 @@ data class StationResponse(
     val longitude: Double,
     val address: String,
     val lastUpdated: String,
+    val distanceKm: Double,
+    val imageLink: String,
 )
 
 @Serializable

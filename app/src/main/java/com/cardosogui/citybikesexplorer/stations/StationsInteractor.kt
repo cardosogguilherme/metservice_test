@@ -6,7 +6,7 @@ import com.cardosogui.citybikesexplorer.data.model.StationResponse
 import com.cardosogui.citybikesexplorer.data.model.StationsResponse
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
-import javax.inject.Singleton
+import kotlin.math.roundToInt
 
 
 class StationsInteractor @Inject constructor(
@@ -33,6 +33,9 @@ data class StationViewItem(
     val longitude: Double,
     val address: String,
     val lastUpdated: String,
+    val distanceKm: Double,
+    val minWalk: String,
+    val imageLink: String,
 )
 
 @Serializable
@@ -49,7 +52,15 @@ data class BikeViewItem(
 // endregion
 
 // region Mappers
-private fun StationResponse.toViewItem() = StationViewItem(
+// Average walking pace ~5 km/h => 12 minutes per kilometre.
+private const val WALK_MINUTES_PER_KM = 12
+
+private fun walkTimeFor(distanceKm: Double): String {
+    val minutes = (distanceKm * WALK_MINUTES_PER_KM).roundToInt().coerceAtLeast(1)
+    return "$minutes min walk"
+}
+
+internal fun StationResponse.toViewItem() = StationViewItem(
     id = id,
     name = name,
     freeBikes = freeBikes,
@@ -58,19 +69,22 @@ private fun StationResponse.toViewItem() = StationViewItem(
     longitude = longitude,
     address = address,
     lastUpdated = lastUpdated,
+    distanceKm = distanceKm,
+    minWalk = walkTimeFor(distanceKm),
+    imageLink = imageLink,
 )
 
-private fun StationsResponse.toViewItem() = StationsViewItem(
+internal fun StationsResponse.toViewItem() = StationsViewItem(
     stations = stationResponses.map { it.toViewItem() },
 )
 
-private fun BikeResponse.toViewItem() = BikeViewItem(
+internal fun BikeResponse.toViewItem() = BikeViewItem(
     id = id,
     name = name,
     stationId = stationId,
 )
 
-private fun BikesResponse.toViewItem() = BikesViewItem(
+internal fun BikesResponse.toViewItem() = BikesViewItem(
     bikes = bikes.map { it.toViewItem() },
 )
 // endregion

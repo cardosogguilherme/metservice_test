@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,10 +19,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,55 +41,68 @@ import com.cardosogui.citybikesexplorer.ui.theme.GreenActive
 import com.cardosogui.citybikesexplorer.ui.theme.Orange
 import com.cardosogui.citybikesexplorer.ui.theme.White
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StationsScreen(
     modifier: Modifier = Modifier,
     state:  StationsUiState,
-    onClick: () -> Unit,
+    onClick: (stationId: String) -> Unit,
     retry: () -> Unit
 ) {
-    when (val state = state) {
-        is StationsUiState.Loading -> {
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .background(White),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }
-
-        is StationsUiState.Error -> {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(White),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(text = state.message, style = MaterialTheme.typography.bodyLarge)
-                Button(
+    Scaffold(
+        modifier = modifier,
+        containerColor = White,
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.stations_title)) },
+                // The host Scaffold already consumes the status-bar inset, so don't add it again.
+                windowInsets = WindowInsets(0, 0, 0, 0),
+            )
+        },
+    ) { innerPadding ->
+        when (state) {
+            is StationsUiState.Loading -> {
+                Box(
                     modifier = Modifier
-                        .padding(top = 16.dp)
-                    ,
-                    onClick = retry
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(White),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    Text("Retry")
+                    CircularProgressIndicator()
                 }
             }
-        }
 
-        is StationsUiState.Success -> {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(White),
-            ) {
-                items(state.stations.stations, key = { it.id }) { station ->
-                    StationCard(stationState = station, onClick = onClick)
-                    HorizontalDivider()
+            is StationsUiState.Error -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(White),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(text = state.message, style = MaterialTheme.typography.bodyLarge)
+                    Button(
+                        modifier = Modifier.padding(top = 16.dp),
+                        onClick = retry,
+                    ) {
+                        Text(stringResource(R.string.retry))
+                    }
+                }
+            }
+
+            is StationsUiState.Success -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(White),
+                ) {
+                    items(state.stations.stations, key = { it.id }) { station ->
+                        StationCard(stationState = station, onClick = { onClick(station.id) })
+                        HorizontalDivider()
+                    }
                 }
             }
         }
@@ -138,7 +155,7 @@ private fun StationCard(
                 )
 
                 Text(
-                    text = "0.2km * 2 min walk",
+                    text = "%.2f km · %s".format(stationState.distanceKm, stationState.minWalk),
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
@@ -194,6 +211,9 @@ val sampleStations = listOf(
         longitude = 0.0,
         address = "123 Main St",
         lastUpdated = "2024-06-01T12:00:00Z",
+        distanceKm = 0.25,
+        minWalk = "3 min walk",
+        imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
     ),
     StationsViewModel.StationState(
         id = "2",
@@ -204,6 +224,9 @@ val sampleStations = listOf(
         longitude = 0.0,
         address = "456 Elm St",
         lastUpdated = "2024-06-01T12:05:00Z",
+        distanceKm = 1.40,
+        minWalk = "17 min walk",
+        imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
     ),
     StationsViewModel.StationState(
         id = "3",
@@ -214,6 +237,9 @@ val sampleStations = listOf(
         longitude = 0.0,
         address = "456 Elm St",
         lastUpdated = "2024-06-01T12:05:00Z",
+        distanceKm = 0.85,
+        minWalk = "10 min walk",
+        imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
     ),
 )
 

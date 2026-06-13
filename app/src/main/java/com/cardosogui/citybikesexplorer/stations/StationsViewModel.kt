@@ -57,6 +57,9 @@ class StationsViewModel @Inject constructor(
         val longitude: Double,
         val address: String,
         val lastUpdated: String,
+        val distanceKm: Double,
+        val minWalk: String,
+        val imageLink: String,
     )
 
     @Serializable
@@ -82,6 +85,9 @@ class StationsViewModel @Inject constructor(
         longitude = longitude,
         address = address,
         lastUpdated = lastUpdated,
+        distanceKm = distanceKm,
+        minWalk = minWalk,
+        imageLink = imageLink,
     )
 
     private fun StationsViewItem.toState() = StationsState(

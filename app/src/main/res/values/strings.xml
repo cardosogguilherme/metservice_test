@@ -2,4 +2,17 @@
     <string name="app_name">CityBikesExplorer</string>
     <string name="label_bikes">Bikes</string>
     <string name="label_docks">Docks</string>
+    <string name="select_a_bike">Select a Bike</string>
+    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="back">Back</string>
+    <string name="station_detail">Station detail</string>
+    <string name="stations_title">Stations</string>
+    <string name="retry">Retry</string>
+    <string name="label_address">Address</string>
+    <string name="label_distance">Distance</string>
+    <string name="label_coordinates">Coordinates</string>
+    <string name="label_last_updated">Last updated</string>
+    <string name="coordinates_format">%.4f, %.4f</string>
+    <string name="distance_format">%.2f km · %s</string>
 </resources>
