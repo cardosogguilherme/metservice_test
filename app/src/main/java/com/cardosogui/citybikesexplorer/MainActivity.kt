@@ -10,8 +10,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemColors
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,11 +35,12 @@ import com.cardosogui.citybikesexplorer.stations.StationsScreen
 import com.cardosogui.citybikesexplorer.stations.StationsUiState
 import com.cardosogui.citybikesexplorer.stations.StationsViewModel
 import com.cardosogui.citybikesexplorer.ui.theme.CityBikesExplorerTheme
+import com.cardosogui.citybikesexplorer.ui.theme.GreenActive
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class MainActivity : ComponentActivity() {
-    private val viewModel: StationsViewModel by viewModels<StationsViewModel>()
+                        @AndroidEntryPoint
+                        class MainActivity : ComponentActivity() {
+                            private val viewModel: StationsViewModel by viewModels<StationsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +57,27 @@ class MainActivity : ComponentActivity() {
     fun CityBikesExplorerApp() {
         var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
 
+        val colors = NavigationSuiteItemColors(
+            navigationBarItemColors = NavigationBarItemDefaults.colors(
+                selectedIconColor = GreenActive,
+                unselectedIconColor = Color.Gray,
+                indicatorColor = Color.Transparent
+            ),
+            navigationRailItemColors = NavigationRailItemColors(
+                selectedIconColor = GreenActive,
+                unselectedIconColor = Color.Gray,
+                selectedTextColor = GreenActive,
+                selectedIndicatorColor = Color.Transparent,
+                unselectedTextColor = Color.Gray,
+                disabledIconColor = Color.Gray,
+                disabledTextColor = Color.Gray
+            ),
+            navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
+                selectedIconColor = GreenActive,
+                unselectedIconColor = Color.Gray
+            )
+        )
+
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 AppDestinations.entries.forEach {
@@ -61,7 +90,8 @@ class MainActivity : ComponentActivity() {
                         },
                         label = { Text(it.label) },
                         selected = it == currentDestination,
-                        onClick = { currentDestination = it }
+                        onClick = { currentDestination = it },
+                        colors = colors
                     )
                 }
             }
@@ -95,13 +125,11 @@ class MainActivity : ComponentActivity() {
         val label: String,
         val icon: Int,
     ) {
-        HOME("Home", R.drawable.ic_home),
+        HOME("Explore", R.drawable.ic_home),
         FAVORITES("Favorites", R.drawable.ic_favorite),
         PROFILE("Profile", R.drawable.ic_account_box),
     }
-
-
-
+                            
     val sampleStations = listOf(
         StationsViewModel.StationState(
             id = "1",
