@@ -13,8 +13,8 @@
     <string name="label_distance">Distance</string>
     <string name="label_coordinates">Coordinates</string>
     <string name="label_last_updated">Last updated</string>
-    <string name="coordinates_format">%.4f, %.4f</string>
-    <string name="distance_format">%.2f km · %s</string>
+    <string name="coordinates_format" formatted="false">%.4f, %.4f</string>
+    <string name="distance_format" formatted="false">%.2f km · %s</string>
     <string name="available_bikes">Available Bikes</string>
     <string name="select">Select</string>
     <string name="battery_format">%d%%</string>
@@ -41,6 +41,24 @@
     <string name="distance_km_format">%.1f km</string>
     <string name="calories_format">%d kcal</string>
     <string name="total_cost_format">NZD $%.2f</string>
-    <string name="cost_breakdown_format">NZD $%.2f + NZD $%.2f / min</string>
+    <string name="cost_breakdown_format" formatted="false">NZD $%.2f + NZD $%.2f / min</string>
     <string name="bikes_docks_format">%1$d bikes • %2$d docks</string>
+
+    <!-- Search & filters -->
+    <string name="search_stations_hint">Search by name</string>
+    <string name="no_stations_found">No stations match your search.</string>
+    <string name="filter_all">All</string>
+    <string name="filter_available">Bikes available</string>
+    <string name="filter_unavailable">No bikes</string>
+
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
+    <string name="no_favorites">No favorite stations yet.\nTap the heart on a station to add it here.</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_first_name">First name</string>
+    <string name="profile_last_name">Last name</string>
+    <string name="profile_support">Support</string>
+    <string name="profile_support_subtitle">Get help with your rides</string>
 </resources>
