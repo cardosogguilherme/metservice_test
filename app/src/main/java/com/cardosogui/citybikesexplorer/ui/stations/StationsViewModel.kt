@@ -2,7 +2,7 @@ package com.cardosogui.citybikesexplorer.ui.stations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cardosogui.citybikesexplorer.data.model.Station
+import com.cardosogui.citybikesexplorer.data.model.StationResponse
 import com.cardosogui.citybikesexplorer.data.repository.StationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 sealed interface StationsUiState {
     data object Loading : StationsUiState
-    data class Success(val stations: List<Station>) : StationsUiState
+    data class Success(val stationResponses: List<StationResponse>) : StationsUiState
     data class Error(val message: String) : StationsUiState
 }
 

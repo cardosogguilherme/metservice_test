@@ -1,0 +1,19 @@
+{
+  "bikes": [
+    { "id": "bk-501", "name": "CityBike 501", "stationId": "st-005" },
+    { "id": "bk-502", "name": "CityBike 502", "stationId": "st-005" },
+    { "id": "bk-503", "name": "CityBike 503", "stationId": "st-005" },
+    { "id": "bk-504", "name": "CityBike 504", "stationId": "st-005" },
+    { "id": "bk-505", "name": "CityBike 505", "stationId": "st-005" },
+    { "id": "bk-506", "name": "CityBike 506", "stationId": "st-005" },
+    { "id": "bk-507", "name": "CityBike 507", "stationId": "st-005" },
+    { "id": "bk-508", "name": "CityBike 508", "stationId": "st-005" },
+    { "id": "bk-509", "name": "CityBike 509", "stationId": "st-005" },
+    { "id": "bk-510", "name": "CityBike 510", "stationId": "st-005" },
+    { "id": "bk-511", "name": "CityBike 511", "stationId": "st-005" },
+    { "id": "bk-512", "name": "CityBike 512", "stationId": "st-005" },
+    { "id": "bk-513", "name": "CityBike 513", "stationId": "st-005" },
+    { "id": "bk-514", "name": "CityBike 514", "stationId": "st-005" },
+    { "id": "bk-515", "name": "CityBike 515", "stationId": "st-005" }
+  ]
+}

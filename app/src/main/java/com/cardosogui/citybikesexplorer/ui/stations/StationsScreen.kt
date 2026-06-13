@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cardosogui.citybikesexplorer.data.model.Station
+import com.cardosogui.citybikesexplorer.data.model.StationResponse
 
 @Composable
 fun StationsScreen(
@@ -57,7 +57,7 @@ fun StationsScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(state.stations, key = { it.id }) { station ->
+                items(state.stationResponses, key = { it.id }) { station ->
                     StationCard(station)
                 }
             }
@@ -66,10 +66,10 @@ fun StationsScreen(
 }
 
 @Composable
-private fun StationCard(station: Station, modifier: Modifier = Modifier) {
+private fun StationCard(stationResponse: StationResponse, modifier: Modifier = Modifier) {
     Card(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = station.name, style = MaterialTheme.typography.titleMedium)
+            Text(text = stationResponse.name, style = MaterialTheme.typography.titleMedium)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -77,11 +77,11 @@ private fun StationCard(station: Station, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "Bikes: ${station.freeBikes}",
+                    text = "Bikes: ${stationResponse.freeBikes}",
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
-                    text = "Free slots: ${station.emptySlots}",
+                    text = "Free slots: ${stationResponse.emptySlots}",
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

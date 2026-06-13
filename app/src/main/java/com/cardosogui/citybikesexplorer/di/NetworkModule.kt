@@ -20,7 +20,8 @@ object NetworkModule {
 
     // Placeholder base URL: LocalJsonInterceptor short-circuits every call,
     // so nothing is ever requested from this host until the interceptor is removed.
-    private const val BASE_URL = "https://api.citybik.es/v2/"
+    // Retrofit still validates it, so it must keep the https:// scheme and trailing slash.
+    private const val BASE_URL = "https://itshouldbearealurlhere.com/"
 
     @Provides
     @Singleton

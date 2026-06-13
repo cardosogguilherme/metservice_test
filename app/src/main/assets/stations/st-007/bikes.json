@@ -1,0 +1,5 @@
+{
+  "bikes": [
+    { "id": "bk-701", "name": "CityBike 701", "stationId": "st-007" }
+  ]
+}

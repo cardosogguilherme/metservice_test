@@ -1,12 +1,14 @@
 {
-  "stations": [
+  "stationResponses": [
     {
       "id": "st-001",
       "name": "Harbour Quay",
       "free_bikes": 12,
       "empty_slots": 4,
       "latitude": -41.2889,
-      "longitude": 174.7772
+      "longitude": 174.7772,
+      "address": "23 Customhouse Quay, Wellington 6011",
+      "lastUpdated": "2026-06-13T08:45:00Z"
     },
     {
       "id": "st-002",
@@ -14,7 +16,9 @@
       "free_bikes": 3,
       "empty_slots": 17,
       "latitude": -41.2790,
-      "longitude": 174.7800
+      "longitude": 174.7800,
+      "address": "2 Bunny Street, Pipitea, Wellington 6011",
+      "lastUpdated": "2026-06-13T08:42:00Z"
     },
     {
       "id": "st-003",
@@ -22,7 +26,9 @@
       "free_bikes": 0,
       "empty_slots": 10,
       "latitude": -41.2825,
-      "longitude": 174.7670
+      "longitude": 174.7670,
+      "address": "101 Glenmore Street, Kelburn, Wellington 6012",
+      "lastUpdated": "2026-06-13T08:51:00Z"
     },
     {
       "id": "st-004",
@@ -30,7 +36,9 @@
       "free_bikes": 8,
       "empty_slots": 8,
       "latitude": -41.2865,
-      "longitude": 174.7787
+      "longitude": 174.7787,
+      "address": "55 Oriental Parade, Oriental Bay, Wellington 6011",
+      "lastUpdated": "2026-06-13T08:47:00Z"
     },
     {
       "id": "st-005",
@@ -38,7 +46,9 @@
       "free_bikes": 15,
       "empty_slots": 0,
       "latitude": -41.2901,
-      "longitude": 174.7681
+      "longitude": 174.7681,
+      "address": "Kelburn Parade, Kelburn, Wellington 6012",
+      "lastUpdated": "2026-06-13T08:39:00Z"
     },
     {
       "id": "st-006",
@@ -46,7 +56,9 @@
       "free_bikes": 6,
       "empty_slots": 9,
       "latitude": -41.2905,
-      "longitude": 174.7820
+      "longitude": 174.7820,
+      "address": "55 Cable Street, Te Aro, Wellington 6011",
+      "lastUpdated": "2026-06-13T08:50:00Z"
     },
     {
       "id": "st-007",
@@ -54,7 +66,9 @@
       "free_bikes": 1,
       "empty_slots": 22,
       "latitude": -41.2730,
-      "longitude": 174.7860
+      "longitude": 174.7860,
+      "address": "105 Waterloo Quay, Pipitea, Wellington 6011",
+      "lastUpdated": "2026-06-13T08:36:00Z"
     }
   ]
 }

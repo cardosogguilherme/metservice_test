@@ -12,7 +12,8 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 
 /**
  * Answers every request from a bundled JSON asset instead of the network,
- * mapping the last path segment to a file in assets/ ("stations" -> stations.json).
+ * mapping the URL path after the API version prefix to a file in assets/
+ * ("v2/stations" -> stations.json, "v2/stations/st-001/bikes" -> stations/st-001/bikes.json).
  * Remove this interceptor from the OkHttpClient once the real API is available.
  */
 class LocalJsonInterceptor @Inject constructor(
@@ -21,7 +22,7 @@ class LocalJsonInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val assetName = "${request.url.pathSegments.last()}.json"
+        val assetName = assetPathFor(request.url.pathSegments)
 
         return try {
             val json = context.assets.open(assetName).bufferedReader().use { it.readText() }
@@ -43,7 +44,15 @@ class LocalJsonInterceptor @Inject constructor(
         }
     }
 
-    private companion object {
-        val JSON_MEDIA_TYPE = "application/json".toMediaType()
+    companion object {
+        private val JSON_MEDIA_TYPE = "application/json".toMediaType()
+        private const val API_VERSION_PREFIX = "v2"
+
+        internal fun assetPathFor(pathSegments: List<String>): String {
+            val segments = pathSegments
+                .filter { it.isNotEmpty() }
+                .let { if (it.firstOrNull() == API_VERSION_PREFIX) it.drop(1) else it }
+            return segments.joinToString(separator = "/", postfix = ".json")
+        }
     }
 }
