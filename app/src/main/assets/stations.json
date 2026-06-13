@@ -1,0 +1,60 @@
+{
+  "stations": [
+    {
+      "id": "st-001",
+      "name": "Harbour Quay",
+      "free_bikes": 12,
+      "empty_slots": 4,
+      "latitude": -41.2889,
+      "longitude": 174.7772
+    },
+    {
+      "id": "st-002",
+      "name": "Central Station",
+      "free_bikes": 3,
+      "empty_slots": 17,
+      "latitude": -41.2790,
+      "longitude": 174.7800
+    },
+    {
+      "id": "st-003",
+      "name": "Botanic Garden Gate",
+      "free_bikes": 0,
+      "empty_slots": 10,
+      "latitude": -41.2825,
+      "longitude": 174.7670
+    },
+    {
+      "id": "st-004",
+      "name": "Waterfront Promenade",
+      "free_bikes": 8,
+      "empty_slots": 8,
+      "latitude": -41.2865,
+      "longitude": 174.7787
+    },
+    {
+      "id": "st-005",
+      "name": "University Campus",
+      "free_bikes": 15,
+      "empty_slots": 0,
+      "latitude": -41.2901,
+      "longitude": 174.7681
+    },
+    {
+      "id": "st-006",
+      "name": "Museum Corner",
+      "free_bikes": 6,
+      "empty_slots": 9,
+      "latitude": -41.2905,
+      "longitude": 174.7820
+    },
+    {
+      "id": "st-007",
+      "name": "Stadium North",
+      "free_bikes": 1,
+      "empty_slots": 22,
+      "latitude": -41.2730,
+      "longitude": 174.7860
+    }
+  ]
+}
