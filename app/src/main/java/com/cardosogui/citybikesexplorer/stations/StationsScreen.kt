@@ -1,4 +1,4 @@
-package com.cardosogui.citybikesexplorer.ui.stations
+package com.cardosogui.citybikesexplorer.stations
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

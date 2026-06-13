@@ -17,10 +17,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import com.cardosogui.citybikesexplorer.ui.stations.StationsScreen
+import com.cardosogui.citybikesexplorer.stations.StationsScreen
 import com.cardosogui.citybikesexplorer.ui.theme.CityBikesExplorerTheme
 import dagger.hilt.android.AndroidEntryPoint
 

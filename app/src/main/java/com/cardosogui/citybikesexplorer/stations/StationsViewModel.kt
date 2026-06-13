@@ -1,9 +1,8 @@
-package com.cardosogui.citybikesexplorer.ui.stations
+package com.cardosogui.citybikesexplorer.stations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cardosogui.citybikesexplorer.data.model.StationResponse
-import com.cardosogui.citybikesexplorer.data.repository.StationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

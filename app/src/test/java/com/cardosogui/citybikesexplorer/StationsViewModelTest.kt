@@ -2,9 +2,9 @@ package com.cardosogui.citybikesexplorer
 
 import com.cardosogui.citybikesexplorer.data.model.BikeResponse
 import com.cardosogui.citybikesexplorer.data.model.StationResponse
-import com.cardosogui.citybikesexplorer.data.repository.StationRepository
-import com.cardosogui.citybikesexplorer.ui.stations.StationsUiState
-import com.cardosogui.citybikesexplorer.ui.stations.StationsViewModel
+import com.cardosogui.citybikesexplorer.stations.StationRepository
+import com.cardosogui.citybikesexplorer.stations.StationsUiState
+import com.cardosogui.citybikesexplorer.stations.StationsViewModel
 import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
