@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -16,20 +15,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.cardosogui.citybikesexplorer.navigation.CityBikesNavHost
-import com.cardosogui.citybikesexplorer.stations.StationsScreen
-import com.cardosogui.citybikesexplorer.stations.StationsUiState
-import com.cardosogui.citybikesexplorer.stations.StationsViewModel
+import com.cardosogui.citybikesexplorer.navigation.Routes
 import com.cardosogui.citybikesexplorer.ui.theme.CityBikesExplorerTheme
 import com.cardosogui.citybikesexplorer.ui.theme.GreenActive
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +45,11 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     fun CityBikesExplorerApp() {
-        var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+        val navController = rememberNavController()
+        val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+        // Show the bottom navigation only on the top-level tabs; hide it for detail and the ride flow
+        // (so the user cannot tab away mid-ride).
+        val showBottomNav = currentRoute == null || currentRoute in Routes.topLevelRoutes
 
         val colors = NavigationSuiteItemColors(
             navigationBarItemColors = NavigationBarItemDefaults.colors(
@@ -73,39 +73,37 @@ class MainActivity : ComponentActivity() {
         )
 
         NavigationSuiteScaffold(
+            layoutType = if (showBottomNav) NavigationSuiteType.NavigationBar else NavigationSuiteType.None,
             navigationSuiteItems = {
-                AppDestinations.entries.forEach {
+                AppDestinations.entries.forEach { destination ->
                     item(
                         icon = {
                             Icon(
-                                painterResource(it.icon),
-                                contentDescription = it.label
+                                painterResource(destination.icon),
+                                contentDescription = destination.label
                             )
                         },
-                        label = { Text(it.label) },
-                        selected = it == currentDestination,
-                        onClick = { currentDestination = it },
+                        label = { Text(destination.label) },
+                        selected = currentRoute == destination.route,
+                        onClick = {
+                            navController.navigate(destination.route) {
+                                // Standard multi-tab behaviour: keep a single instance per tab and
+                                // preserve each tab's own back stack state.
+                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         colors = colors
                     )
                 }
             }
         ) {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                when (currentDestination) {
-                    AppDestinations.HOME -> {
-                        CityBikesNavHost(
-                            modifier = Modifier.padding(innerPadding),
-                        )
-                    }
-                    else -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Coming Soon: ${currentDestination.label}")
-                        }}
-                }
+                CityBikesNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding),
+                )
             }
         }
     }
@@ -113,66 +111,10 @@ class MainActivity : ComponentActivity() {
     enum class AppDestinations(
         val label: String,
         val icon: Int,
+        val route: String,
     ) {
-        HOME("Explore", R.drawable.ic_home),
-        FAVORITES("Favorites", R.drawable.ic_favorite),
-        PROFILE("Profile", R.drawable.ic_account_box),
-    }
-                            
-    val sampleStations = listOf(
-        StationsViewModel.StationState(
-            id = "1",
-            name = "Station 1",
-            freeBikes = 5,
-            emptySlots = 10,
-            latitude = 0.0,
-            longitude = 0.0,
-            address = "123 Main St",
-            lastUpdated = "2024-06-01T12:00:00Z",
-            distanceKm = 0.25,
-            minWalk = "3 min walk",
-            imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
-        ),
-        StationsViewModel.StationState(
-            id = "2",
-            name = "Station 2",
-            freeBikes = 2,
-            emptySlots = 8,
-            latitude = 0.0,
-            longitude = 0.0,
-            address = "456 Elm St",
-            lastUpdated = "2024-06-01T12:05:00Z",
-            distanceKm = 1.40,
-            minWalk = "17 min walk",
-            imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
-        ),
-        StationsViewModel.StationState(
-            id = "3",
-            name = "Station 3",
-            freeBikes = 0,
-            emptySlots = 10,
-            latitude = 0.0,
-            longitude = 0.0,
-            address = "456 Elm St",
-            lastUpdated = "2024-06-01T12:05:00Z",
-            distanceKm = 0.85,
-            minWalk = "10 min walk",
-            imageLink = "https://images.pexels.com/photos/37342833/pexels-photo-37342833.jpeg",
-        ),
-    )
-
-    val stateSuccess = StationsUiState.Success(StationsViewModel.StationsState(sampleStations))
-
-    @Composable
-    @Preview
-    fun CityBikesExplorerAppPreview() {
-        CityBikesExplorerTheme {
-            StationsScreen(
-                modifier = Modifier,
-                state = stateSuccess,
-                onClick = { },
-                retry = {  }
-            )
-        }
+        HOME("Explore", R.drawable.ic_home, Routes.STATIONS),
+        FAVORITES("Favorites", R.drawable.ic_favorite, Routes.FAVORITES),
+        PROFILE("Profile", R.drawable.ic_account_box, Routes.PROFILE),
     }
 }

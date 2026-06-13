@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cardosogui.citybikesexplorer.confirmRide.ConfirmRideRoute
+import com.cardosogui.citybikesexplorer.favorites.FavoritesRoute
+import com.cardosogui.citybikesexplorer.profile.ProfileRoute
 import com.cardosogui.citybikesexplorer.rideInProgress.RideInProgressRoute
 import com.cardosogui.citybikesexplorer.rideSummary.RideSummaryRoute
 import com.cardosogui.citybikesexplorer.selectBike.SelectBikeRoute
@@ -21,6 +23,8 @@ import com.cardosogui.citybikesexplorer.stations.StationsViewModel
 
 object Routes {
     const val STATIONS = "stations"
+    const val FAVORITES = "favorites"
+    const val PROFILE = "profile"
     const val STATION_ID_ARG = "stationId"
     const val BIKE_ID_ARG = "bikeId"
     const val STATION_DETAIL = "stationDetail/{$STATION_ID_ARG}"
@@ -28,6 +32,9 @@ object Routes {
     const val CONFIRM_RIDE = "confirmRide/{$STATION_ID_ARG}/{$BIKE_ID_ARG}"
     const val RIDE_IN_PROGRESS = "rideInProgress"
     const val RIDE_SUMMARY = "rideSummary"
+
+    /** Destinations that show the bottom navigation. */
+    val topLevelRoutes = setOf(STATIONS, FAVORITES, PROFILE)
 
     fun stationDetail(stationId: String) = "stationDetail/$stationId"
     fun selectBike(stationId: String) = "selectBike/$stationId"
@@ -50,8 +57,20 @@ fun CityBikesNavHost(
             StationsScreen(
                 state = state,
                 onClick = { stationId -> navController.navigate(Routes.stationDetail(stationId)) },
+                onSearchChange = viewModel::onSearchChange,
+                onFilterChange = viewModel::onFilterChange,
                 retry = viewModel::retry,
             )
+        }
+
+        composable(Routes.FAVORITES) {
+            FavoritesRoute(
+                onStationClick = { stationId -> navController.navigate(Routes.stationDetail(stationId)) },
+            )
+        }
+
+        composable(Routes.PROFILE) {
+            ProfileRoute()
         }
 
         composable(
