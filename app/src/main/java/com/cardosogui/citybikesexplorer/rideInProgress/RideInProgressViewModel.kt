@@ -26,12 +26,12 @@ class RideInProgressViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            while (isActive) {
-                val startedAt = interactor.startedAtMillis()
-                if (startedAt != null) {
-                    _uiState.value = buildUi(System.currentTimeMillis() - startedAt)
-                }
+            // Tick once a second while the ride is active; stop as soon as it ends.
+            var startedAt = interactor.startedAtMillis()
+            while (isActive && startedAt != null) {
+                _uiState.value = buildUi(System.currentTimeMillis() - startedAt)
                 delay(1000)
+                startedAt = interactor.startedAtMillis()
             }
         }
     }
