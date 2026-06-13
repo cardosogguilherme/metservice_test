@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CityBikesExplorer</string>
+    <string name="label_bikes">Bikes</string>
+    <string name="label_docks">Docks</string>
 </resources>

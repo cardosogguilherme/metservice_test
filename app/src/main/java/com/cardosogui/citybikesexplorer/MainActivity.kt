@@ -1,9 +1,12 @@
 package com.cardosogui.citybikesexplorer
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -11,20 +14,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cardosogui.citybikesexplorer.stations.StationsScreen
+import com.cardosogui.citybikesexplorer.stations.StationsUiState
+import com.cardosogui.citybikesexplorer.stations.StationsViewModel
 import com.cardosogui.citybikesexplorer.ui.theme.CityBikesExplorerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel: StationsViewModel by viewModels<StationsViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,66 +43,110 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@PreviewScreenSizes
-@Composable
-fun CityBikesExplorerApp() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @Composable
+    fun CityBikesExplorerApp() {
+        var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
 
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
-            AppDestinations.entries.forEach {
-                item(
-                    icon = {
-                        Icon(
-                            painterResource(it.icon),
-                            contentDescription = it.label
-                        )
-                    },
-                    label = { Text(it.label) },
-                    selected = it == currentDestination,
-                    onClick = { currentDestination = it }
-                )
+        NavigationSuiteScaffold(
+            navigationSuiteItems = {
+                AppDestinations.entries.forEach {
+                    item(
+                        icon = {
+                            Icon(
+                                painterResource(it.icon),
+                                contentDescription = it.label
+                            )
+                        },
+                        label = { Text(it.label) },
+                        selected = it == currentDestination,
+                        onClick = { currentDestination = it }
+                    )
+                }
             }
-        }
-    ) {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            when (currentDestination) {
-                AppDestinations.HOME -> StationsScreen(
-                    modifier = Modifier.padding(innerPadding)
-                )
+        ) {
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                when (currentDestination) {
+                    AppDestinations.HOME -> {
+                        val state = viewModel.uiState.collectAsState().value
+                        StationsScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            state = state,
+                            onClick = { /* TODO: Handle station click */ },
+                            retry = viewModel::retry
+                        )
+                    }
 
-                else -> Greeting(
-                    name = currentDestination.label,
-                    modifier = Modifier.padding(innerPadding)
-                )
+                    else -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Coming Soon: ${currentDestination.label}")
+                        }}
+                }
             }
         }
     }
-}
 
-enum class AppDestinations(
-    val label: String,
-    val icon: Int,
-) {
-    HOME("Home", R.drawable.ic_home),
-    FAVORITES("Favorites", R.drawable.ic_favorite),
-    PROFILE("Profile", R.drawable.ic_account_box),
-}
+    enum class AppDestinations(
+        val label: String,
+        val icon: Int,
+    ) {
+        HOME("Home", R.drawable.ic_home),
+        FAVORITES("Favorites", R.drawable.ic_favorite),
+        PROFILE("Profile", R.drawable.ic_account_box),
+    }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+
+
+    val sampleStations = listOf(
+        StationsViewModel.StationState(
+            id = "1",
+            name = "Station 1",
+            freeBikes = 5,
+            emptySlots = 10,
+            latitude = 0.0,
+            longitude = 0.0,
+            address = "123 Main St",
+            lastUpdated = "2024-06-01T12:00:00Z",
+        ),
+        StationsViewModel.StationState(
+            id = "2",
+            name = "Station 2",
+            freeBikes = 2,
+            emptySlots = 8,
+            latitude = 0.0,
+            longitude = 0.0,
+            address = "456 Elm St",
+            lastUpdated = "2024-06-01T12:05:00Z",
+        ),
+        StationsViewModel.StationState(
+            id = "3",
+            name = "Station 3",
+            freeBikes = 0,
+            emptySlots = 10,
+            latitude = 0.0,
+            longitude = 0.0,
+            address = "456 Elm St",
+            lastUpdated = "2024-06-01T12:05:00Z",
+        ),
     )
-}
 
-@Preview()
-@Composable
-fun GreetingPreview() {
-    CityBikesExplorerTheme {
-        Greeting("Android")
+    val stateSuccess = StationsUiState.Success(StationsViewModel.StationsState(sampleStations))
+
+    @Composable
+    @Preview
+    fun CityBikesExplorerAppPreview() {
+        CityBikesExplorerTheme {
+            StationsScreen(
+                modifier = Modifier,
+                state = stateSuccess,
+                onClick = { },
+                retry = {  }
+            )
+        }
     }
 }

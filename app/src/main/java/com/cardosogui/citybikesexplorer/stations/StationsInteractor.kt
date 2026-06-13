@@ -4,12 +4,12 @@ import com.cardosogui.citybikesexplorer.data.model.BikeResponse
 import com.cardosogui.citybikesexplorer.data.model.BikesResponse
 import com.cardosogui.citybikesexplorer.data.model.StationResponse
 import com.cardosogui.citybikesexplorer.data.model.StationsResponse
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class StationsInteractor(
+
+class StationsInteractor @Inject constructor(
     private val repository: StationRepository,
 ) {
     suspend fun getStations() = repository.getStations().toViewItem()
@@ -20,7 +20,7 @@ class StationsInteractor(
 // region Data Models
 @Serializable
 data class StationsViewItem(
-    val stationResponses: List<StationViewItem>,
+    val stations: List<StationViewItem>,
 )
 
 @Serializable
@@ -61,7 +61,7 @@ private fun StationResponse.toViewItem() = StationViewItem(
 )
 
 private fun StationsResponse.toViewItem() = StationsViewItem(
-    stationResponses = stationResponses.map { it.toViewItem() },
+    stations = stationResponses.map { it.toViewItem() },
 )
 
 private fun BikeResponse.toViewItem() = BikeViewItem(
