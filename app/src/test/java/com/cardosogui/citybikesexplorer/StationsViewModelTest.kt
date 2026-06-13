@@ -1,14 +1,18 @@
 package com.cardosogui.citybikesexplorer
 
-import com.cardosogui.citybikesexplorer.data.model.BikeResponse
-import com.cardosogui.citybikesexplorer.data.model.StationResponse
-import com.cardosogui.citybikesexplorer.stations.StationRepository
+import com.cardosogui.citybikesexplorer.stations.StationFilter
+import com.cardosogui.citybikesexplorer.stations.StationsInteractor
 import com.cardosogui.citybikesexplorer.stations.StationsUiState
 import com.cardosogui.citybikesexplorer.stations.StationsViewModel
-import java.io.IOException
+import com.cardosogui.citybikesexplorer.testutil.FakeStationRepository
+import com.cardosogui.citybikesexplorer.testutil.stationResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -21,58 +25,95 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class StationsViewModelTest {
 
-    private val testDispatcher = StandardTestDispatcher()
-
     @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-    }
+    fun setUp() = Dispatchers.setMain(StandardTestDispatcher())
 
     @After
-    fun tearDown() {
-        Dispatchers.resetMain()
+    fun tearDown() = Dispatchers.resetMain()
+
+    private fun viewModel(repo: FakeStationRepository) =
+        StationsViewModel(StationsInteractor(repo))
+
+    private fun TestScope.collect(vm: StationsViewModel) {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { vm.uiState.collect {} }
     }
 
+    private fun content(vm: StationsViewModel) = vm.uiState.value as StationsUiState.Content
+
     @Test
-    fun `starts in Loading then emits Success with stations from repository`() = runTest {
-        val stationResponses = listOf(
-            StationResponse(
-                "st-001",
-                "Harbour Quay",
-                freeBikes = 12,
-                emptySlots = 4,
-                latitude = -41.28,
-                longitude = 174.77,
-                address = "23 Customhouse Quay, Wellington 6011",
-                lastUpdated = "2026-06-13T08:45:00Z",
+    fun `loads all stations`() = runTest {
+        val repo = FakeStationRepository(
+            stations = listOf(
+                stationResponse("1", "Harbour Quay", freeBikes = 3),
+                stationResponse("2", "Central Station", freeBikes = 0),
             ),
         )
-        val viewModel = StationsViewModel(FakeStationRepository(Result.success(stationResponses)))
+        val vm = viewModel(repo)
+        collect(vm)
+        advanceUntilIdle()
 
-        assertEquals(StationsUiState.Loading, viewModel.uiState.value)
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals(StationsUiState.Success(stationResponses), viewModel.uiState.value)
+        assertEquals(2, content(vm).stations.size)
     }
 
     @Test
-    fun `emits Error when repository fails and recovers on retry`() = runTest {
-        val repository = FakeStationRepository(Result.failure(IOException("boom")))
-        val viewModel = StationsViewModel(repository)
-        testDispatcher.scheduler.advanceUntilIdle()
+    fun `search starts filtering only at three characters`() = runTest {
+        val repo = FakeStationRepository(
+            stations = listOf(
+                stationResponse("1", "Harbour Quay"),
+                stationResponse("2", "Central Station"),
+            ),
+        )
+        val vm = viewModel(repo)
+        collect(vm)
+        advanceUntilIdle()
 
-        assertTrue(viewModel.uiState.value is StationsUiState.Error)
+        vm.onSearchChange("ce")
+        advanceUntilIdle()
+        assertEquals(2, content(vm).stations.size)
 
-        repository.result = Result.success(emptyList())
-        viewModel.retry()
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals(StationsUiState.Success(emptyList()), viewModel.uiState.value)
+        vm.onSearchChange("cen")
+        advanceUntilIdle()
+        assertEquals(listOf("Central Station"), content(vm).stations.map { it.name })
     }
 
-    private class FakeStationRepository(var result: Result<List<StationResponse>>) : StationRepository {
-        override suspend fun getStations(): List<StationResponse> = result.getOrThrow()
-        override suspend fun getBikes(stationId: String): List<BikeResponse> = emptyList()
+    @Test
+    fun `search with no match yields empty content`() = runTest {
+        val repo = FakeStationRepository(stations = listOf(stationResponse("1", "Harbour Quay")))
+        val vm = viewModel(repo)
+        collect(vm)
+        advanceUntilIdle()
+
+        vm.onSearchChange("zzz")
+        advanceUntilIdle()
+        assertTrue(content(vm).stations.isEmpty())
+    }
+
+    @Test
+    fun `availability filter keeps only matching stations`() = runTest {
+        val repo = FakeStationRepository(
+            stations = listOf(
+                stationResponse("1", "A", freeBikes = 4),
+                stationResponse("2", "B", freeBikes = 0),
+            ),
+        )
+        val vm = viewModel(repo)
+        collect(vm)
+        advanceUntilIdle()
+
+        vm.onFilterChange(StationFilter.AVAILABLE)
+        advanceUntilIdle()
+        assertEquals(listOf("1"), content(vm).stations.map { it.id })
+
+        vm.onFilterChange(StationFilter.UNAVAILABLE)
+        advanceUntilIdle()
+        assertEquals(listOf("2"), content(vm).stations.map { it.id })
+    }
+
+    @Test
+    fun `load failure emits error`() = runTest {
+        val vm = viewModel(FakeStationRepository(failStations = true))
+        collect(vm)
+        advanceUntilIdle()
+        assertTrue(vm.uiState.value is StationsUiState.Error)
     }
 }
